@@ -14,6 +14,7 @@ PERIPHERAL_TYPES = {
     MsgHubAttachedIO.DEV_MOTOR_EXTERNAL_TACHO: EncodedMotor,
     MsgHubAttachedIO.DEV_MOTOR_INTERNAL_TACHO: EncodedMotor,
     MsgHubAttachedIO.DEV_VISION_SENSOR: VisionSensor,
+    MsgHubAttachedIO.DEV_LED_LIGHT: LEDLight,
     MsgHubAttachedIO.DEV_RGB_LIGHT: LEDRGB,
     MsgHubAttachedIO.DEV_TILT_EXTERNAL: TiltSensor,
     MsgHubAttachedIO.DEV_TILT_INTERNAL: TiltSensor,
@@ -209,6 +210,7 @@ class MoveHub(Hub):
         # shorthand fields
         self.button = Button(self)
         self.led = None
+        self.light = None
         self.current = None
         self.voltage = None
         self.motor_A = None
@@ -281,6 +283,8 @@ class MoveHub(Hub):
                 elif type(self.peripherals[port]) == EncodedMotor \
                         and port not in (self.PORT_A, self.PORT_B, self.PORT_AB):
                     self.motor_external = self.peripherals[port]
+                elif type(self.peripherals[port]) == LEDLight:
+                    self.light = self.peripherals[port]
 
 
 class TrainHub(Hub):

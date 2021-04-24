@@ -207,6 +207,25 @@ class Peripheral(object):
         return descr
 
 
+class LEDLight(Peripheral):
+    MODE_LIGHT = 0x00
+
+    def __init__(self, parent, port):
+        super(LEDLight, self).__init__(parent, port)
+
+    def set_light(self, light):
+        self.set_port_mode(self.MODE_LIGHT)
+        payload = pack("<B", self.MODE_LIGHT) + pack("<B", light)
+
+        msg = MsgPortOutput(self.port, MsgPortOutput.WRITE_DIRECT_MODE_DATA, payload)
+        self._send_output(msg)
+
+    def _decode_port_data(self, msg):
+        if len(msg.payload) == 3:
+            return usbyte(msg.payload, 0), usbyte(msg.payload, 1), usbyte(msg.payload, 2),
+        else:
+            return usbyte(msg.payload, 0),
+
 class LEDRGB(Peripheral):
     MODE_INDEX = 0x00
     MODE_RGB = 0x01
